@@ -81,9 +81,9 @@ for word in allNegWords:
 """Building the vocabulary, and creating the model by calculating probabilities"""
 
 
-def calculateProbScore(wordfreqinpos, totalwordsintraining, numberofvocab, k):
+def calculateProbScore(wordfreqinpos, sentimentvocab, numberofvocab, k):
 
-    score = log((wordfreqinpos + k), 10) / log((totalwordsintraining + (numberofvocab * k)), 10)
+    score = log((wordfreqinpos + k), 10) / log((sentimentvocab + (numberofvocab * k)), 10)
     return score
 
 normalizedPoswordsCount = Counter(normalizedPoswords)
@@ -92,9 +92,10 @@ normalizedNegwordsCount = Counter(normalizedNegwords)
 for key, value in normalizedPoswordsCount.iteritems():
 
         realnormalizedposwords.append(key) #getting distinct positive words here
+        #print 'this is key %s' % key
         if value >= 25:
             vocabularypos.append(key)
-            posscore = calculateProbScore(value, 8641, 369, 1)
+            posscore = calculateProbScore(value, 369, 680, 1)
             positiveProb[key] = posscore
 
 for key, value in normalizedNegwordsCount.iteritems():
@@ -102,7 +103,7 @@ for key, value in normalizedNegwordsCount.iteritems():
         realnormalizednegwords.append(key) #getting distinct negative words here
         if value >= 25:
             vocabularyneg.append(key)
-            negscore = calculateProbScore(value, 8389, 342, 1)
+            negscore = calculateProbScore(value, 342, 680, 1)
             negativeProb[key] = negscore
 
 
@@ -212,7 +213,9 @@ def checkReview():
         sumnegvalue = 0
         for num in sumneg:
             sumnegvalue += num
-
+        print i
+        print sumposvalue
+        print sumnegvalue
         if sumposvalue > sumnegvalue:
             resultList.append('P')
 
@@ -240,3 +243,4 @@ for q in range(0, 50):
     print resultList[q]
 
 print accuracy
+
